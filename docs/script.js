@@ -1,37 +1,39 @@
-var PageState = {
+const PageState = {
   db: null,
 
-  init: function () {
-    var request = indexedDB.open("myDatabase", 1);
+  init() {
+    const request = indexedDB.open("myDatabase", 1);
 
-    request.onupgradeneeded = function (event) {
-      PageState.db = event.target.result;
-      var objectStore = PageState.db.createObjectStore("pageState", {
+    request.onupgradeneeded = (event) => {
+      this.db = event.target.result;
+      const objectStore = this.db.createObjectStore("pageState", {
         keyPath: "url",
       });
     };
 
-    request.onsuccess = function (event) {
-      PageState.db = event.target.result;
+    request.onsuccess = (event) => {
+      this.db = event.target.result;
     };
   },
 
-  saveState: function () {
-    var data = document.getElementById("dataInput").value;
-    var transaction = PageState.db.transaction(["pageState"], "readwrite");
-    var objectStore = transaction.objectStore("pageState");
-    objectStore.put({ url: window.location.href, data: data });
+  saveState(data) {
+    const transaction = this.db.transaction(["pageState"], "readwrite");
+    const objectStore = transaction.objectStore("pageState");
+    objectStore.put({ url: window.location.href, data });
   },
 
-  loadState: function () {
-    var transaction = PageState.db.transaction(["pageState"]);
-    var objectStore = transaction.objectStore("pageState");
-    var request = objectStore.get(window.location.href);
-    request.onsuccess = function (event) {
-      document.getElementById("output").innerText = request.result
-        ? request.result.data
-        : "No data found";
-    };
+  loadState() {
+    const transaction = this.db.transaction(["pageState"]);
+    const objectStore = transaction.objectStore("pageState");
+    const request = objectStore.get(window.location.href);
+    return new Promise((resolve, reject) => {
+      request.onsuccess = (event) => {
+        resolve(request.result ? request.result.data : null);
+      };
+      request.onerror = (event) => {
+        reject(new Error("Data retrieval failed"));
+      };
+    });
   },
 };
 

@@ -11,12 +11,23 @@
     <div>
         <input type="text" id="dataInput" placeholder="Enter some data">
         <!-- PageStateオブジェクトを通じて関数を呼び出す -->
-        <button onclick="PageState.saveState()">Save</button>
-        <button onclick="PageState.loadState()">Load</button>
+        <button onclick="PageState.saveState(document.getElementById('dataInput').value)">Save</button>
+        <button onclick="retrieveData()">Load</button>
     </div>
     <div id="output"></div>
 
     <script src="script.js"></script>
+    <script>
+        // loadStateの返り値を使用してデータを取得
+        async function retrieveData() {
+            try {
+                const data = await PageState.loadState();
+                document.getElementById('output').innerText = data || "No data found";
+            } catch (error) {
+                console.error("Error retrieving data:", error);
+            }
+        }
+    </script>
 </body>
 
 </html>
