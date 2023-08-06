@@ -13,9 +13,10 @@
         <!-- PageStateオブジェクトを通じて関数を呼び出す -->
         <button onclick="PageState.saveState(document.getElementById('dataInput').value)">Save</button>
         <button onclick="retrieveData()">Load</button>
+        <!-- 以下が追加されたdeleteStateメソッドを呼び出すボタンです -->
+        <button onclick="deleteData()">Delete</button>
     </div>
     <div id="output"></div>
-
     <script src="script.js"></script>
     <script>
         // loadStateの返り値を使用してデータを取得
@@ -25,6 +26,16 @@
                 document.getElementById('output').innerText = data || "No data found";
             } catch (error) {
                 console.error("Error retrieving data:", error);
+            }
+        }
+
+        // deleteStateメソッドを呼び出す関数
+        async function deleteData() {
+            try {
+                await PageState.deleteState();
+                document.getElementById('output').innerText = "Data deleted successfully";
+            } catch (error) {
+                console.error("Error deleting data:", error);
             }
         }
     </script>
