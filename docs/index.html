@@ -10,8 +10,9 @@
 <body>
     <div>
         <input type="text" id="dataInput" placeholder="Enter some data">
-        <button onclick="saveState()">Save</button>
-        <button onclick="loadState()">Load</button>
+        <!-- PageStateオブジェクトを通じて関数を呼び出す -->
+        <button onclick="PageState.saveState()">Save</button>
+        <button onclick="PageState.loadState()">Load</button>
     </div>
     <div id="output"></div>
 
